@@ -15,10 +15,10 @@ Works on Linux, Windows and MacOS.
 # Usage
 `leet "Elite Hacker" -x -q`
 
-`echo "Elite Hacker" | mock`
+`echo "Elite Hacker" | leet`
 
 ## Interactive mode
-`leet` then type sentences to mock.
+`leet` then type sentences to leetify.
 
 # Parameters
 `leet --help`
