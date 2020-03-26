@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+import subprocess
+import sys
+
+
+def to_leet(x: str):
+    letter_to_leet = dict(
+        filter(lambda y: y[0] != y[1], zip('abcdefghijklmnopqrstuvwxyz', '4bcd3f6h1jklmn0pqr57uvwxyz'))
+    )
+    return letter_to_leet.get(x.lower(), x)
+
+
+def leetify(s: str):
+    return ''.join(map(to_leet, s))
+
+
+def to_clipboard(x):
+    os = sys.platform
+    if os == 'linux':
+        subprocess.run(f'echo -n "{x}" | xclip -sel clip', shell=True)
+    elif os == 'darwin':
+        subprocess.run(f'echo -n "{x}" | pbcopy', shell=True)
+    elif os == 'win32':
+        subprocess.run(f'echo -n "{x}" | clip', shell=True)
+
+
+def run_leet(message: str, copy: bool, quiet: bool):
+    output = leetify(message)
+    if copy:
+        to_clipboard(output)
+    if not quiet:
+        print(output)
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='L3371fy y0ur m3554635')
+    parser.add_argument('message', help='message to leetify, alternatively you can pipe text into leet', nargs='?')
+    parser.add_argument('-x', '--copy',
+                        help='copy leet message to clipboard, only works with last piped line',
+                        action='store_true')
+    parser.add_argument('-q', '--quiet', help='does not print to terminal', action='store_true')
+    args = parser.parse_args()
+
+    copy = args.copy
+    quiet = args.quiet
+
+    if args.message is not None:
+        run_leet(args.message, copy, quiet)
+    else:
+        args.copy = False
+        for line in sys.stdin:
+            run_leet(line.replace('\n', ''), copy, quiet)
